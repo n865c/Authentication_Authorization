@@ -10,17 +10,25 @@ try{
             mesaage:"Provide all the fields"
         });
     }
-    const encodedPassword=await bcrypt.hash(password,10);
-    console.log(encodedPassword);
-    const response=await User.create({
-        name,email,password:encodedPassword,role
-    });
-    res.status(200).json({
-        success:true,
-        data:response,
-        message:"signUp successfully",
-    })
-
+    const checkUser=await User.findOne({email});
+    if(checkUser)
+    {
+        return res.status(400).json({
+            success:false,
+            message:"User email's already exists"
+        })
+    }
+       const encodedPassword=await bcrypt.hash(password,10);
+        console.log(encodedPassword);
+        const response=await User.create({
+            name,email,password:encodedPassword,role
+        });
+        res.status(200).json({
+            success:true,
+            data:response,
+            message:"signUp successfully",
+        })
+    
 }
 catch(err){
     res.status(500).json({
