@@ -5,6 +5,11 @@ exports.auth=(req,res,next)=>{
     const {token}=req.body;
     const decode=jwt.verify(token,process.env.jwt_secret);
     console.log(decode);
+    if(!decode)
+    return res.status(500).json({
+        success:false,
+        message:"user is not verified"
+    })
     req.user=decode;
     next();
     }catch(err){
